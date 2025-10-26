@@ -1,4 +1,7 @@
 <x-layout>
+    {{-- @if ($errors->any())
+        {{ dd($errors->all()) }}
+    @endif --}}
     <x-slot:title>
         Home Feed
     </x-slot:title>
@@ -6,6 +9,33 @@
     <div class="mx-auto max-w-2xl">
         <h1 class="mt-8 text-3xl font-bold">Latest Chirps</h1>
 
+        <!-- Chirp Form -->
+        <div class="card bg-base-100 mt-8 shadow">
+            <div class="card-body">
+                <form method="POST" action="/chirps">
+                    @csrf
+                    <div class="form-control w-full">
+                        <textarea name="message" placeholder="What's on your mind?"
+                            class="textarea textarea-bordered @error('message') textarea-error @enderror w-full resize-none"
+                            rows="4" maxlength="255" >{{ old('message') }}</textarea>
+
+                        @error('message')
+                            <div class="label">
+                                <span class="label-text-alt text-error">{{ $message }}</span>
+                            </div>
+                        @enderror
+                    </div>
+
+                    <div class="mt-4 flex items-center justify-end">
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            Chirp
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Feed -->
         <div class="mt-8 space-y-4">
             @forelse ($chirps as $chirp)
                 <x-chirp :chirp="$chirp" />
